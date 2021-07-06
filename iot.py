@@ -2,7 +2,6 @@
 
 import time
 import sys
-import RPi.GPIO as GPIO
 from awscrt import io, mqtt, auth, http
 from awsiot import mqtt_connection_builder
 import time as t
@@ -10,7 +9,7 @@ import json
 from gpiozero import CPUTemperature
 import datetime
 
-EMULATE_HX711=False
+EMULATE_HX711=true
 
 referenceUnit = 359.5397391
 
@@ -47,14 +46,10 @@ def getserial():
 def on_message_received(topic, payload, **kwargs):
     print("Received message from topic '{}': {}".format(topic, payload))
     print("args", kwargs)
+    hx.tare()
+    print("Tare done! Add weight now...")
 
 
-
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
-
-# Define ENDPOINT, CLIENT_ID, PATH_TO_CERT, PATH_TO_KEY, PATH_TO_ROOT, MESSAGE, TOPIC, and RANGE
 ENDPOINT = "a1bqva80g2zl30-ats.iot.eu-central-1.amazonaws.com"
 CLIENT_ID = "PiScale"
 PATH_TO_CERT = "/home/pi/hx711py/cert.pem"
@@ -65,20 +60,20 @@ TOPIC = "test/testing" #not used
 RANGE = 20
 
 
-# Spin up resources
+
 event_loop_group = io.EventLoopGroup(1)
 host_resolver = io.DefaultHostResolver(event_loop_group)
 client_bootstrap = io.ClientBootstrap(event_loop_group, host_resolver)
 mqtt_connection = mqtt_connection_builder.mtls_from_path(endpoint=ENDPOINT,cert_filepath=PATH_TO_CERT,pri_key_filepath=PATH_TO_KEY,client_bootstrap=client_bootstrap,ca_filepath=PATH_TO_ROOT,client_id=CLIENT_ID,clean_session=False,keep_alive_secs=6)
 print("Connecting to {} with client ID '{}'...".format(ENDPOINT, CLIENT_ID))
-# Make the connect() call
+
 connect_future = mqtt_connection.connect()
 # Future.result() waits until a result is available
 connect_future.result()
 print("Connected!")
 # Publish message to server desired number of times.
-print('Begin Publish')
-# for i in range (RANGE):
+
+
 
 # disconnect_future = mqtt_connection.disconnect()
 # disconnect_future.result()
